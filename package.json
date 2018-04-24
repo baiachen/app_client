@@ -1,0 +1,40 @@
+{
+  "name": "app_client",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "flow": "flow",
+    "flow-stop": "flow stop",
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "react": "16.3.1",
+    "react-native": "0.55.3",
+    "react-navigation": "^1.5.11",
+    "tcomb-form-native": "^0.6.11"
+  },
+  "devDependencies": {
+    "babel-core": "^7.0.0-beta.46",
+    "babel-eslint": "^8.2.3",
+    "babel-jest": "22.4.3",
+    "babel-preset-flow": "^6.23.0",
+    "babel-preset-react-native": "4.0.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "16.1.0",
+    "eslint-config-prettier": "2.9.0",
+    "eslint-plugin-import": "2.7.0",
+    "eslint-plugin-jsx-a11y": "6.0.2",
+    "eslint-plugin-prettier": "2.6.0",
+    "eslint-plugin-react": "7.4.0",
+    "flow-bin": "^0.67.0",
+    "jest": "22.4.3",
+    "prettier": "^1.12.1",
+    "react-test-renderer": "16.3.2"
+  },
+  "peerDependencies": {},
+  "jest": {
+    "preset": "react-native"
+  }
+}

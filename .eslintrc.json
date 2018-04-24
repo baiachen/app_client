@@ -1,0 +1,11 @@
+{
+  "parser": "babel-eslint",
+  "extends": ["airbnb-base", "prettier"],
+  "plugins": ["prettier", "react", "jsx-a11y", "import"],
+  "rules": {
+    "max-len": [2, 120],
+    "no-underscore-dangle": "off",
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error"
+  }
+}
