@@ -1,12 +1,13 @@
-import React, { Component } from "react";
-import { Button, View, YellowBox } from "react-native";
-import axios from "axios";
-import t from "tcomb-form-native";
-import styles from "./style";
+import React, { Component } from 'react';
+import { Button, View, YellowBox } from 'react-native';
+import axios from 'axios';
+import t from 'tcomb-form-native';
+import fixtures from './fixtures.json';
+import styles from './style';
 
 YellowBox.ignoreWarnings([
-  "Warning: isMounted(...) is deprecated",
-  "Module RCTImageLoader"
+  'Warning: isMounted(...) is deprecated',
+  'Module RCTImageLoader'
 ]);
 
 const { Form } = t.form;
@@ -26,15 +27,19 @@ const options = {
 
 export default class Login extends Component<> {
   static navigationOptions = {
-    title: "Login"
+    title: 'Login'
   };
 
   onSubmitPressed = async () => {
     try {
-      const response = await axios.post("http://10.0.3.2:3000", this.state);
-      if (response.data.success) {
-        this.props.navigation.navigate("homepage", {
-          token: response.data.token
+      const { data } = await axios({
+        method: 'post',
+        baseURL: fixtures.baseUrl,
+        data: this.state
+      });
+      if (data.success) {
+        this.props.navigation.navigate('tournaments', {
+          token: data.token
         });
       }
     } catch (error) {
@@ -44,7 +49,7 @@ export default class Login extends Component<> {
 
   onChange = value => this.setState(value);
 
-  register = () => this.props.navigation.navigate("register");
+  register = () => this.props.navigation.navigate('register');
 
   render() {
     return (

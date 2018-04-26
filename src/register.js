@@ -1,8 +1,9 @@
-import React, { Component } from "react";
-import { Button, View } from "react-native";
-import axios from "axios";
-import t from "tcomb-form-native";
-import styles from "./style";
+import React, { Component } from 'react';
+import { Button, View } from 'react-native';
+import axios from 'axios';
+import t from 'tcomb-form-native';
+import styles from './style';
+import fixtures from './fixtures.json';
 
 const { Form } = t.form;
 
@@ -14,7 +15,7 @@ const User = t.struct({
 });
 
 const options = {
-  auto: "placeholders",
+  auto: 'placeholders',
   fields: {
     password: {
       secureTextEntry: true
@@ -24,18 +25,20 @@ const options = {
 
 export default class Register extends Component<> {
   static navigationOptions = {
-    title: "Register"
+    title: 'Register'
   };
 
   onSubmitPressed = async () => {
     try {
-      const response = await axios.post(
-        "http://10.0.3.2:3000/players",
-        this.state
-      );
-      if (response.data.success) {
-        this.props.navigation.navigate("homepage", {
-          token: response.data.token
+      const { data } = await axios({
+        method: 'post',
+        baseURL: fixtures.baseUrl,
+        url: 'players',
+        data: this.state
+      });
+      if (data.success) {
+        this.props.navigation.navigate('tournaments', {
+          token: data.token
         });
       }
     } catch (error) {
@@ -45,7 +48,7 @@ export default class Register extends Component<> {
 
   onChange = value => this.setState(value);
 
-  login = () => this.props.navigation.navigate("login");
+  login = () => this.props.navigation.navigate('login');
 
   render() {
     return (

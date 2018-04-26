@@ -1,11 +1,11 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   description: {
     marginBottom: 20,
     fontSize: 18,
-    textAlign: "center",
-    color: "#656565"
+    textAlign: 'center',
+    color: '#656565'
   },
   container: {
     padding: 30,
@@ -17,13 +17,13 @@ export default StyleSheet.create({
     marginBottom: 30
   },
   flowRight: {
-    flexDirection: "row",
-    alignItems: "center",
-    alignSelf: "stretch"
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'stretch'
   },
   input: {
     borderWidth: 1,
-    borderColor: "#48BBEC",
+    borderColor: '#48BBEC',
     borderRadius: 8,
     padding: 8
   },
@@ -34,12 +34,37 @@ export default StyleSheet.create({
     flexGrow: 1,
     fontSize: 18,
     borderWidth: 1,
-    borderColor: "#48BBEC",
+    borderColor: '#48BBEC',
     borderRadius: 8,
-    color: "#48BBEC"
+    color: '#48BBEC'
   },
   image: {
     width: 217,
     height: 138
+  },
+  thumb: {
+    width: 80,
+    height: 80,
+    marginRight: 10
+  },
+  textContainer: {
+    flex: 1
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#dddddd'
+  },
+  price: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: '#48BBEC'
+  },
+  title: {
+    fontSize: 20,
+    color: '#656565'
+  },
+  rowContainer: {
+    flexDirection: 'row',
+    padding: 10
   }
 });

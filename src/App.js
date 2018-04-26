@@ -4,16 +4,16 @@
  * @flow
  */
 
-import { StackNavigator } from "react-navigation";
+import { StackNavigator } from 'react-navigation';
 
-import login from "./login";
-import register from "./register";
-import homepage from "./homepage";
+import login from './login';
+import register from './register';
+import tournaments from './tournaments';
 
 const app = StackNavigator({
   login,
   register,
-  homepage
+  tournaments
 });
 
 export default app;
