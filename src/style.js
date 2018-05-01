@@ -66,5 +66,19 @@ export default StyleSheet.create({
   rowContainer: {
     flexDirection: 'row',
     padding: 10
+  },
+  subheading: {
+    fontSize: 15,
+    color: '#6c7ba2',
+    marginLeft: 30,
+    marginRight: 30
+  },
+
+  viewPager: {
+    flex: 1
+  },
+  pageStyle: {
+    alignItems: 'center',
+    padding: 20
   }
 });

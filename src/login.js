@@ -30,6 +30,14 @@ export default class Login extends Component<> {
     title: 'Login'
   };
 
+  // TEMPORARY
+  componentDidMount() {
+    this.setState({
+      email: 'homer@simpson.com',
+      password: 'password'
+    });
+  }
+
   onSubmitPressed = async () => {
     try {
       const { data } = await axios({

@@ -53,8 +53,8 @@ export default class Tournaments extends Component<> {
 
   constructor(props) {
     super(props);
-    const { token } = this.props.navigation.state.params;
-    this.state = { token, player: {}, tournaments: [] };
+    console.log(this.props.navigation.state.params.token);
+    this.state = { player: {}, tournaments: [], scores: {} };
   }
 
   componentDidMount() {
@@ -64,11 +64,12 @@ export default class Tournaments extends Component<> {
 
   getPlayerData = async () => {
     try {
+      const { token } = this.props.navigation.state.params;
       const { data } = await axios({
         method: 'get',
         baseURL: fixtures.baseUrl,
         url: 'player',
-        headers: { Authorization: this.state.token }
+        headers: { Authorization: token }
       });
       this.setState(() => ({
         player: data
@@ -83,37 +84,68 @@ export default class Tournaments extends Component<> {
    */
   getTournamentData = async () => {
     try {
+      const { token, player } = this.props.navigation.state.params;
       const { data } = await axios({
         method: 'get',
         baseURL: fixtures.baseUrl,
         url: 'tournaments',
-        headers: { Authorization: this.state.token }
+        headers: { Authorization: token }
       });
       this.setState(() => ({
         tournaments: data
       }));
+
+      // if only one tournament navigate to next screen
+      if (data.length === 1) {
+        this._skipScreen(token, player, data[0]);
+      }
     } catch (e) {
       console.log(e);
     }
   };
 
-  _keyExtractor = (item, index) => index;
+  _keyExtractor = (item, index) => index.toString();
 
   _renderItem = ({ item, index }) => (
     <ListItem item={item} index={index} onPressItem={this._onPressItem} />
   );
 
-  _onPressItem = async (item, index) => {
+  _onPressItem = async item => {
     // get or create scores for player in selected tournament
-    const query = queryString.stringify({ tournamentId: item._id });
-    const { data } = await axios({
-      method: 'get',
-      baseURL: fixtures.baseUrl,
-      url: `enter?${query}`,
-      headers: { Authorization: this.state.token }
+    const { token, player } = this.props.navigation.state.params;
+    await this.getScoreData(token, item._id);
+    this._navigate(token, player, item, this.state.scores);
+  };
+
+  getScoreData = async (token, tournamentId) => {
+    // get or create scores for player in selected tournament
+    try {
+      const query = queryString.stringify({ tournamentId });
+      const { data } = await axios({
+        method: 'get',
+        baseURL: fixtures.baseUrl,
+        url: `enter?${query}`,
+        headers: { Authorization: token }
+      });
+      this.setState(() => ({ scores: data }));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  _skipScreen = async (token, player, tournament) => {
+    await this.getScoreData(token, tournament._id);
+    this._navigate(token, player, tournament, this.state.scores);
+  };
+
+  _navigate = (token, player, tournament, scores) => {
+    // navigate to next screen
+    this.props.navigation.navigate('games', {
+      token,
+      player,
+      tournament,
+      scores
     });
-    console.log(data);
-    // TODO navigate to next screen
   };
 
   render() {
