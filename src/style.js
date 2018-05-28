@@ -1,6 +1,16 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
+  actionButton: {
+    alignSelf: 'flex-end',
+    position: 'absolute',
+    bottom: 35
+  },
+  actionButtonIcon: {
+    fontSize: 20,
+    height: 22,
+    color: 'white'
+  },
   description: {
     marginBottom: 20,
     fontSize: 18,

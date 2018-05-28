@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, View } from 'react-native';
+import { Button, ToastAndroid, View } from 'react-native';
 import axios from 'axios';
 import t from 'tcomb-form-native';
 import styles from './style';
@@ -28,21 +28,31 @@ export default class Register extends Component<> {
     title: 'Register'
   };
 
+  // TEMPORARY
+  componentDidMount() {
+    this.setState({
+      firstName: 'Alexis',
+      lastName: 'Sanchez',
+      email: 'alexis@manutd.com',
+      password: 'password'
+    });
+  }
+
   onSubmitPressed = async () => {
+    console.log(this.state);
     try {
-      const { data } = await axios({
+      const response = await axios({
         method: 'post',
         baseURL: fixtures.baseUrl,
         url: 'players',
         data: this.state
       });
-      if (data.success) {
-        this.props.navigation.navigate('tournaments', {
-          token: data.token
-        });
+      if (response.status === 200) {
+        const { token, player } = response.data;
+        this.props.navigation.navigate('tournaments', { token, player });
       }
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      ToastAndroid.show('invalid form input', ToastAndroid.SHORT);
     }
   };
 

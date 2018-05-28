@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, View, YellowBox } from 'react-native';
+import { Button, ToastAndroid, View, YellowBox } from 'react-native';
 import axios from 'axios';
 import t from 'tcomb-form-native';
 import fixtures from './fixtures.json';
@@ -40,15 +40,26 @@ export default class Login extends Component<> {
 
   onSubmitPressed = async () => {
     try {
-      const { data } = await axios({
+      const {
+        data,
+        status,
+        statusText,
+        headers,
+        config,
+        request
+      } = await axios({
         method: 'post',
         baseURL: fixtures.baseUrl,
         data: this.state
       });
-      if (data.success) {
+      const { token, player } = data;
+      if (status === 200) {
         this.props.navigation.navigate('tournaments', {
-          token: data.token
+          token,
+          player
         });
+      } else {
+        ToastAndroid.show(data.message, ToastAndroid.SHORT);
       }
     } catch (error) {
       console.error(error);

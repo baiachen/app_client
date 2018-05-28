@@ -4,6 +4,7 @@
   "plugins": ["prettier", "react", "jsx-a11y", "import"],
   "rules": {
     "max-len": [2, 120],
+    "no-console": "off",
     "no-underscore-dangle": "off",
     "prettier/prettier": [
       "error", {
