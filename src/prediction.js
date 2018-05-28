@@ -119,12 +119,6 @@ export default class Prediction extends Component {
             }}
             enabled={futureDate(games[i].startTime)}
           >
-            <Picker.Item
-              key={null}
-              value={null}
-              label={'Winner'}
-              enabled={false}
-            />
             {pickTeams}
           </Picker>
         );

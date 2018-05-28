@@ -79,6 +79,13 @@ export default class Games extends Component<> {
     await this.getGameData(this.state.filter);
   };
 
+  statusBar = async () => {
+    // games left
+    // correct
+    // points scored
+    // points used
+  };
+
   getGameData = async filter => {
     this.setState(() => ({ filter }));
     this.props.navigation.setParams({ titleFilter: filterStrings[filter] });
@@ -159,6 +166,7 @@ export default class Games extends Component<> {
     return (
       <View style={styles.rowContainer}>
         <FlatList
+          ListHeaderComponent={() => <Text>No games!</Text>}
           data={this.state.games}
           keyExtractor={this._keyExtractor}
           renderItem={this._renderItem}
