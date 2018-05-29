@@ -4,6 +4,7 @@ import React, { Component, PureComponent } from 'react';
 import {
   Button,
   FlatList,
+  Image,
   Picker,
   Text,
   TouchableHighlight,
@@ -20,15 +21,26 @@ class ListItem extends PureComponent {
   render() {
     const { item } = this.props;
     if (item) {
-      const { name, shortName } = item;
+      const { name, crestUrl, flagUrl } = item;
+      if (crestUrl && flagUrl) {
+        console.log(name);
+      }
       return (
         <TouchableHighlight onPress={this._onPress} underlayColor="#dddddd">
           <View>
             <View style={styles.rowContainer}>
               <View style={styles.textContainer}>
                 <Text style={styles.title} numberOfLines={1}>
-                  {shortName}
+                  {name}
                 </Text>
+                <Image
+                  style={{ width: 50, height: 50 }}
+                  source={{ uri: flagUrl }}
+                />
+                <Image
+                  style={{ width: 50, height: 50 }}
+                  source={{ uri: crestUrl }}
+                />
               </View>
             </View>
             <View style={styles.separator} />

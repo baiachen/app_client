@@ -3,6 +3,7 @@ import queryString from 'querystring';
 import React, { Component, PureComponent } from 'react';
 import {
   FlatList,
+  Image,
   Text,
   TouchableHighlight,
   View,
@@ -26,12 +27,16 @@ class ListItem extends PureComponent {
     const { item } = this.props;
     if (item) {
       // item = tournament
-      const { name } = item;
+      const { name, logoUrl } = item;
       return (
         <TouchableHighlight onPress={this._onPress} underlayColor="#dddddd">
           <View>
             <View style={styles.rowContainer}>
               <View style={styles.textContainer}>
+                <Image
+                  style={{ width: 50, height: 50 }}
+                  source={{ uri: logoUrl }}
+                />
                 <Text style={styles.title} numberOfLines={1}>
                   {name}
                 </Text>
@@ -79,7 +84,7 @@ export default class Tournaments extends Component<> {
 
       // if only one tournament navigate to next screen
       if (data.length === 1) {
-        await this._skipScreen(token, player, data[0]);
+        // await this._skipScreen(token, player, data[0]);
       }
     } catch (e) {
       console.log(e);
