@@ -58,7 +58,8 @@ export default StyleSheet.create({
     marginRight: 10
   },
   textContainer: {
-    flex: 1
+    flex: 1,
+    flexDirection: 'row'
   },
   separator: {
     height: 1,
