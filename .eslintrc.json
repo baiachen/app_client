@@ -5,6 +5,9 @@
   "rules": {
     "max-len": [2, 120],
     "no-console": "off",
+    "no-param-reassign": [2, {
+      "props": false
+    }],
     "no-underscore-dangle": "off",
     "prettier/prettier": [
       "error", {

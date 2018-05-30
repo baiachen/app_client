@@ -22,9 +22,6 @@ class ListItem extends PureComponent {
     const { item } = this.props;
     if (item) {
       const { name, crestUrl, flagUrl } = item;
-      if (crestUrl && flagUrl) {
-        console.log(name);
-      }
       return (
         <TouchableHighlight onPress={this._onPress} underlayColor="#dddddd">
           <View>
@@ -64,8 +61,12 @@ export default class Prediction extends Component {
   constructor(props) {
     super(props);
     const { index } = this.props.navigation.state.params;
-    // this.state = { game: '' };
     this._setHeader(index);
+  }
+
+  componentDidMount() {
+    const { index, games } = this.props.navigation.state.params;
+    this.setState({ game: games[index]._id });
   }
 
   _keyExtractor = (item, index) => index.toString();
@@ -75,6 +76,11 @@ export default class Prediction extends Component {
   _setHeader = index => {
     const { games } = this.props.navigation.state.params;
     this.props.navigation.setParams({ title: games[index].name });
+  };
+
+  _setGameState = index => {
+    const { games } = this.props.navigation.state.params;
+    this.setState({ game: games[index]._id });
   };
 
   savePrediction = async () => {
@@ -88,7 +94,6 @@ export default class Prediction extends Component {
       url: 'predictions',
       headers: { Authorization: token }
     });
-    console.log(data);
   };
 
   render() {
@@ -125,7 +130,7 @@ export default class Prediction extends Component {
           <Picker
             style={{ height: 50, width: 200 }}
             prompt="Predict Winner"
-            selectedValue="Predict Winner" // {this.state && this.state.team}
+            selectedValue={this.state && this.state.team}
             onValueChange={value => {
               this.setState({ team: value });
             }}
@@ -185,6 +190,7 @@ export default class Prediction extends Component {
         initialPage={index}
         onPageSelected={event => {
           this._setHeader(event.nativeEvent.position);
+          this._setGameState(event.nativeEvent.position);
         }}
       >
         {items}

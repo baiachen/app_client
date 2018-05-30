@@ -84,7 +84,7 @@ export default class Tournaments extends Component<> {
 
       // if only one tournament navigate to next screen
       if (data.length === 1) {
-        // await this._skipScreen(token, player, data[0]);
+        await this._skipScreen(token, player, data[0]);
       }
     } catch (e) {
       console.log(e);
@@ -92,15 +92,7 @@ export default class Tournaments extends Component<> {
   };
 
   _skipScreen = async (token, player, tournament) => {
-    await this.getScoreData(token, tournament._id);
-    await this.getPredictionData(token, tournament._id);
-    this._navigate(
-      token,
-      player,
-      tournament,
-      this.state.scores,
-      this.state.predictions
-    );
+    await this._navigate(token, player, tournament);
   };
 
   getScoreData = async (token, tournamentId) => {
@@ -113,36 +105,21 @@ export default class Tournaments extends Component<> {
         url: `enter?${query}`,
         headers: { Authorization: token }
       });
-      this.setState(() => ({ scores: data }));
+      return data;
     } catch (e) {
       console.log(e);
+      return null;
     }
   };
 
-  getPredictionData = async (token, tournamentId) => {
-    // get predictions for player in selected tournament
-    try {
-      const query = queryString.stringify({ tournamentId });
-      const { data } = await axios({
-        method: 'get',
-        baseURL: fixtures.baseUrl,
-        url: `predictions?${query}`,
-        headers: { Authorization: token }
-      });
-      this.setState(() => ({ predictions: data }));
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  _navigate = (token, player, tournament, scores, predictions) => {
+  _navigate = async (token, player, tournament) => {
     // navigate to next screen
+    const scores = await this.getScoreData(token, tournament._id);
     this.props.navigation.navigate('games', {
       token,
       player,
       tournament,
-      scores,
-      predictions
+      scores
     });
   };
 
@@ -155,15 +132,7 @@ export default class Tournaments extends Component<> {
   _onPressItem = async tournament => {
     // get or create scores for player in selected tournament
     const { token, player } = this.props.navigation.state.params;
-    await this.getScoreData(token, tournament._id);
-    // await this.getPredictionData(token, tournament._id);
-    this._navigate(
-      token,
-      player,
-      tournament,
-      this.state.scores,
-      this.state.predictions
-    );
+    await this._navigate(token, player, tournament);
   };
 
   render() {

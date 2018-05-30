@@ -30,16 +30,19 @@ class ListItem extends PureComponent {
     // item = game
     const { item } = this.props;
     if (item) {
-      // if item has prediction, display info
-      // flag ,  weight, correct
-      const { name } = item;
+      const { name, prediction } = item;
+      const predictionDetails = prediction || {
+        team: '',
+        weighting: '',
+        correct: ''
+      };
       return (
         <TouchableHighlight onPress={this._onPress} underlayColor="#dddddd">
           <View>
             <View style={styles.rowContainer}>
               <View style={styles.textContainer}>
                 <Text style={styles.title} numberOfLines={1}>
-                  {name}
+                  {name} {predictionDetails.weighting}
                 </Text>
               </View>
             </View>
@@ -79,11 +82,42 @@ export default class Games extends Component<> {
     await this.getGameData(this.state.filter);
   };
 
-  statusBar = async () => {
-    // games left
-    // correct
-    // points scored
-    // points used
+  statusBar = () => {
+    const { scores, tournament } = this.props.navigation.state.params;
+    const {
+      correctPredictions,
+      pointsScored,
+      pointsUsed,
+      totalPredictions,
+      weightingsRemaining
+    } = scores;
+
+    const reducer = (accumulator, currentValue) => accumulator + currentValue;
+
+    const totalRemaining = weightingsRemaining.reduce(reducer);
+
+    const gamesRemaining = tournament.events - tournament.eventsComplete;
+
+    return (
+      <View style={{ flex: 1, flexDirection: 'row' }}>
+        <View style={{ flex: 1 }}>
+          <Text>{gamesRemaining} games remaining</Text>
+        </View>
+        <View style={{ flex: 1 }}>
+          <Text>
+            {correctPredictions} / {totalPredictions} correct
+          </Text>
+        </View>
+        <View style={{ flex: 1 }}>
+          <Text>
+            {pointsScored} / {pointsUsed} points
+          </Text>
+        </View>
+        <View style={{ flex: 1 }}>
+          <Text>{totalRemaining} points left</Text>
+        </View>
+      </View>
+    );
   };
 
   getGameData = async filter => {
@@ -95,29 +129,39 @@ export default class Games extends Component<> {
         tournament: tournament._id,
         filter
       });
-      console.log(query);
       const { data } = await axios({
         method: 'get',
         baseURL: fixtures.baseUrl,
         url: `games?${query}`,
         headers: { Authorization: token }
       });
+      // data = game documents
+
+      // get prediction info for games
+      await Promise.all(
+        data.map(async game => {
+          game.prediction = await this.getPredictionInfo(game._id);
+        })
+      );
+
+      // set state for games retrieved, with prediction info
       this.setState(() => ({ games: data }));
+      console.log(this.state.games);
     } catch (e) {
       console.log(e);
     }
-    console.log(`Games: ${this.state.games.length}`);
-    await this.getPredictionInfo();
   };
 
-  getPredictionInfo = async games => {
-    // make API calls for predictions
-    // for game, for player
-    // update game state
-    // for this.state.games
-    // iterate through 1 predictions (shorter), 2 games
-    // if game id = prediction.game
-    // game.prediction = { flag weight correct}
+  getPredictionInfo = async game => {
+    const { token } = this.props.navigation.state.params;
+    const { data } = await axios({
+      method: 'get',
+      baseURL: fixtures.baseUrl,
+      url: `prediction/${game}`,
+      headers: { Authorization: token }
+    });
+    const { team, weighting, correct } = data;
+    return { team, weighting, correct };
   };
 
   _keyExtractor = (item, index) => index.toString();
@@ -166,7 +210,7 @@ export default class Games extends Component<> {
     return (
       <View style={styles.rowContainer}>
         <FlatList
-          ListHeaderComponent={() => <Text>No games!</Text>}
+          ListHeaderComponent={this.statusBar}
           data={this.state.games}
           keyExtractor={this._keyExtractor}
           renderItem={this._renderItem}
