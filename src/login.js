@@ -53,13 +53,14 @@ export default class Login extends Component<> {
         data: this.state
       });
       const { token, player } = data;
+      console.log(token);
       if (status === 200) {
         this.props.navigation.navigate('tournaments', {
           token,
           player
         });
       } else {
-        ToastAndroid.show(data.message, ToastAndroid.SHORT);
+        ToastAndroid.show('error', ToastAndroid.SHORT);
       }
     } catch (error) {
       console.error(error);

@@ -30,6 +30,7 @@ class ListItem extends PureComponent {
     // item = game
     const { item } = this.props;
     if (item) {
+      console.log(Object.keys(item));
       const { name, prediction } = item;
       const predictionDetails = prediction || {
         team: '',
@@ -60,8 +61,8 @@ const filterStrings = {
   past: 'Past',
   inPlay: 'In Play',
   future: 'Future',
-  withPrediction: 'With Prediction',
-  withoutPrediction: 'Without Prediction'
+  prediction: 'With Prediction',
+  noPrediction: 'Without Prediction'
 };
 
 export default class Games extends Component<> {
@@ -129,6 +130,7 @@ export default class Games extends Component<> {
         tournament: tournament._id,
         filter
       });
+
       const { data } = await axios({
         method: 'get',
         baseURL: fixtures.baseUrl,
@@ -146,7 +148,6 @@ export default class Games extends Component<> {
 
       // set state for games retrieved, with prediction info
       this.setState(() => ({ games: data }));
-      console.log(this.state.games);
     } catch (e) {
       console.log(e);
     }
@@ -188,14 +189,7 @@ export default class Games extends Component<> {
   };
 
   render() {
-    const filters = [
-      'all',
-      'past',
-      'inPlay',
-      'future',
-      'withPrediction',
-      'withoutPrediction'
-    ];
+    const filters = Object.keys(filterStrings);
     const actionButtonItems = filters.map(filter => (
       <ActionButton.Item
         buttonColor="#9b59b6"
